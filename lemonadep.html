@@ -98,12 +98,15 @@
             Make sure your computer has
             <code class="language-plaintext highlighter-rouge">adb</code> and
             <code class="language-plaintext highlighter-rouge">fastboot</code>.
-            Setup instructions can be found
-            <a href="/adb_fastboot_guide.html">here</a>.
+            Setup instructions can be found at lineage wiki
+            <a href="https://wiki.lineageos.org/adb_fastboot_guide">here</a>.
           </li>
           <li>
             Enable
-            <a href="/adb_fastboot_guide.html#setting-up-adb">USB debugging</a>
+            <a
+              href="https://wiki.lineageos.org/adb_fastboot_guide.html#setting-up-adb"
+              >USB debugging</a
+            >
             on your device.
           </li>
         </ol>
@@ -245,7 +248,8 @@
             </li>
           </ol>
           <h2 id="flashing-the-dtbo-and-vendor-boot-partitions">
-            Flashing the dtbo and vendor boot partitions
+            Flashing the dtbo, vendor boot partitions and temporarily booting
+            recovery
           </h2>
           <div class="alert alert-danger" role="alert">
             <div class="alert-icon"><i class="material-icons">warning</i></div>
@@ -298,12 +302,6 @@ fastboot flash vendor_boot &lt;vendor_boot&gt;.img
                 </div>
               </div>
             </li>
-          </ol>
-          <h2 id="temporarily-booting-a-custom-recovery-using-fastboot">
-            Temporarily booting a custom recovery using
-            <code class="language-plaintext highlighter-rouge">fastboot</code>
-          </h2>
-          <ol>
             <li>
               Download
               <a
@@ -312,24 +310,6 @@ fastboot flash vendor_boot &lt;vendor_boot&gt;.img
               >. Simply download the latest recovery file, named
               <code class="language-plaintext highlighter-rouge">boot.img</code
               >.
-            </li>
-            <li>Connect your device to your PC via USB.</li>
-            <li>
-              On the computer, open a command prompt (on Windows) or terminal
-              (on Linux or macOS) window, and type:
-              <div class="language-plaintext highlighter-rouge">
-                <div class="highlight">
-                  <pre class="highlight"><code>adb reboot bootloader
-</code></pre>
-                </div>
-              </div>
-              <p>You can also boot into fastboot mode via a key combination:</p>
-              <ul>
-                <li>
-                  With the device powered off, hold <kbd>Volume Up</kbd> +
-                  <kbd>Volume Down</kbd> + <kbd>Power</kbd>.
-                </li>
-              </ul>
             </li>
             <li>
               Once the device is in fastboot mode, verify your PC finds it by
