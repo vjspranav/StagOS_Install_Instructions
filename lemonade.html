@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
+    />
+    <title>Install StagOS on lemonade</title>
+    <link href="/assets/css/material-kit.css" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons"
+      rel="stylesheet"
+    />
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+      integrity="sha256-3edrmyuQ0w65f8gfBsqowzjJe2iM6n0nKciPUp8y+7E="
+      crossorigin="anonymous"
+    ></script>
+    <script src="/assets/js/main.min.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/3.2.2/anchor.min.js"
+      integrity="sha256-WofcoLT8gToeaSmVRe28qpnlFxdBJH1n4K6Bk3YowvU="
+      crossorigin="anonymous"
+    ></script>
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/images/favicons/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      href="/images/favicons/favicon-32x32.png"
+      sizes="32x32"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      href="/images/favicons/favicon-16x16.png"
+      sizes="16x16"
+    />
+    <link rel="manifest" href="/images/favicons/manifest.json" />
+    <link
+      rel="mask-icon"
+      href="/images/favicons/safari-pinned-tab.svg"
+      color="#167c80"
+    />
+    <link rel="shortcut icon" href="/images/favicons/favicon.ico" />
+    <meta
+      name="msapplication-config"
+      content="/images/favicons/browserconfig.xml"
+    />
+    <meta name="theme-color" content="#ffffff" />
+  </head>
+  <body>
+    <nav class="navbar fixed-top navbar-expand-lg bg-white mb-0 rounded-0">
+      <div class="container">
+        <div class="navbar-translate">
+          <a class="navbar-brand font-weight-bold" href="/">StagOS</a>
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a href="https://stag-os.org" class="nav-link">
+                <i class="material-icons">open_in_new</i>
+                Website
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <div class="main-content">
+      <div class="container page">
+        <h1>Install StagOS on lemonade</h1>
+        | Guide from
+        <a href="https://wiki.lineageos.org/devices/lemonade/install"
+          >Lineage Wiki</a
+        >
+        <div class="alert alert-danger" role="alert">
+          <div class="alert-icon"><i class="material-icons">warning</i></div>
+          <div class="alert-text">
+            <b>Warning:</b> These instructions only work if you follow every
+            section and step precisely.<br />
+            Do <strong>not</strong> continue after something fails!
+          </div>
+        </div>
+        <h2 id="basic-requirements">Basic requirements</h2>
+        <ol>
+          <li>
+            Read through the instructions at least once before actually
+            following them, so as to avoid any problems due to any missed steps!
+          </li>
+          <li>
+            Make sure your computer has
+            <code class="language-plaintext highlighter-rouge">adb</code> and
+            <code class="language-plaintext highlighter-rouge">fastboot</code>.
+            Setup instructions can be found
+            <a href="/adb_fastboot_guide.html">here</a>.
+          </li>
+          <li>
+            Enable
+            <a href="/adb_fastboot_guide.html#setting-up-adb">USB debugging</a>
+            on your device.
+          </li>
+          <li>
+            Make sure that your model is actually listed in the “Supported
+            models” section
+            <a href="/devices/lemonade#supported-models">here</a> (exact match
+            required!)
+          </li>
+        </ol>
+        <div class="alert alert-danger" role="alert">
+          <div class="alert-icon"><i class="material-icons">warning</i></div>
+          <div class="alert-text">
+            <b>Warning:</b> Before following these instructions please ensure
+            that the device is currently using
+            <strong>Android 12</strong> firmware.<br />
+            If the vendor provided multiple updates for that version, e.g.
+            security updates, make sure you are on the latest!<br />
+            If your current installation is newer or older than
+            <strong>Android 12</strong>, please up- or downgrade to the required
+            version before proceeding (guides can be found on the internet!).
+          </div>
+        </div>
+        <script>
+          $(function () {
+            if (window.location.hash.length === 0) {
+              toggleBlur();
+            }
+          });
+
+          function toggleBlur() {
+            $("#blurred").toggleClass("blurred");
+            $("#unblur").toggle();
+          }
+        </script>
+        <div id="unblur" style="display: none">
+          By clicking the following button you are confirming that you've met
+          all of the basic requirements and read the warnings.<br />
+          <button onclick="toggleBlur()" class="btn btn-primary">
+            Show instructions
+          </button>
+        </div>
+        <div id="blurred">
+          <h2 id="unlocking-the-bootloader">Unlocking the bootloader</h2>
+          <div class="alert alert-info" role="alert">
+            <div class="alert-icon">
+              <i class="material-icons">info_outline</i>
+            </div>
+            <div class="alert-text">
+              <b>Note:</b> The steps below only need to be run once per device.
+            </div>
+          </div>
+          <div class="alert alert-danger" role="alert">
+            <div class="alert-icon"><i class="material-icons">warning</i></div>
+            <div class="alert-text">
+              <b>Warning:</b> Unlocking the bootloader will erase all data on
+              your device! Before proceeding, ensure the data you would like to
+              retain is backed up to your PC and/or your Google account, or
+              equivalent. Please note that OEM backup solutions like Samsung and
+              Motorola backup may not be accessible from LineageOS once
+              installed.
+            </div>
+          </div>
+          <ol>
+            <li>
+              <p>
+                Enable OEM unlock in the Developer options under device
+                Settings, if present.
+              </p>
+            </li>
+            <li>Connect the device to your PC via USB.</li>
+            <li>
+              On the computer, open a command prompt (on Windows) or terminal
+              (on Linux or macOS) window, and type:
+              <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight"><code>adb reboot bootloader
+</code></pre>
+                </div>
+              </div>
+              <p>You can also boot into fastboot mode via a key combination:</p>
+              <ul>
+                <li>
+                  With the device powered off, hold <kbd>Volume Up</kbd> +
+                  <kbd>Volume Down</kbd> + <kbd>Power</kbd>.
+                </li>
+              </ul>
+            </li>
+            <li>
+              Once the device is in fastboot mode, verify your PC finds it by
+              typing:
+              <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight"><code>fastboot devices
+</code></pre>
+                </div>
+              </div>
+              <p>If you don’t get any output or an error:</p>
+              <ul>
+                <li>
+                  on Windows: make sure the device appears in the device manager
+                  without a triangle. Try other drivers until the command above
+                  works!
+                </li>
+                <li>
+                  on Linux or macOS: If you see
+                  <code class="language-plaintext highlighter-rouge"
+                    >no permissions fastboot</code
+                  >
+                  try running
+                  <code class="language-plaintext highlighter-rouge"
+                    >fastboot</code
+                  >
+                  as root. When the output is empty, check your USB cable and
+                  port!
+                </li>
+              </ul>
+            </li>
+            <li>
+              <p>Now type the following command to unlock the bootloader:</p>
+              <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight"><code>fastboot oem unlock
+</code></pre>
+                </div>
+              </div>
+              <div class="alert alert-info" role="alert">
+                <div class="alert-icon">
+                  <i class="material-icons">info_outline</i>
+                </div>
+                <div class="alert-text">
+                  <b>Note:</b> At this point the device may display on-screen
+                  prompts which will require interaction to continue the process
+                  of unlocking the bootloader. Please take whatever actions the
+                  device asks you to to proceed.
+                </div>
+              </div>
+            </li>
+            <li>
+              If the device doesn’t automatically reboot, reboot it. It should
+              now be unlocked.
+            </li>
+            <li>
+              Since the device resets completely, you will need to re-enable USB
+              debugging to continue.
+            </li>
+          </ol>
+          <h2 id="flashing-the-dtbo-and-vendor-boot-partitions">
+            Flashing the dtbo and vendor boot partitions
+          </h2>
+          <div class="alert alert-danger" role="alert">
+            <div class="alert-icon"><i class="material-icons">warning</i></div>
+            <div class="alert-text">
+              <b>Warning:</b> This platform requires the dtbo and vendor boot
+              partitions to be flashed for recovery to work properly, the
+              process to do so is described below.
+            </div>
+          </div>
+          <ol>
+            <li>
+              Download dtbo and vendor_boot files from
+              <a
+                href="https://vjsbuilds.stag-os.org/jenkins/StagOS-lemonade-12.1-OFFICIAL-Pristine-20220620-0705/"
+                >here</a
+              >. Download the files named
+              <code class="language-plaintext highlighter-rouge">dtbo.img</code>
+              and
+              <code class="language-plaintext highlighter-rouge"
+                >vendor_boot.img</code
+              >
+              from the directory named with the latest date.
+            </li>
+            <li>
+              Power off the device, and boot it into bootloader mode:
+              <ul>
+                <li>
+                  With the device powered off, hold <kbd>Volume Up</kbd> +
+                  <kbd>Volume Down</kbd> + <kbd>Power</kbd>.
+                </li>
+              </ul>
+            </li>
+            <li>
+              Flash the downloaded image files to your device by typing (replace
+              <code class="language-plaintext highlighter-rouge"
+                >&lt;dtbo&gt;</code
+              >
+              and
+              <code class="language-plaintext highlighter-rouge"
+                >&lt;vendor_boot&gt;</code
+              >
+              with the actual filenames!):
+              <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre
+                    class="highlight"
+                  ><code>fastboot flash dtbo &lt;dtbo&gt;.img
+fastboot flash vendor_boot &lt;vendor_boot&gt;.img
+</code></pre>
+                </div>
+              </div>
+            </li>
+          </ol>
+          <h2 id="temporarily-booting-a-custom-recovery-using-fastboot">
+            Temporarily booting a custom recovery using
+            <code class="language-plaintext highlighter-rouge">fastboot</code>
+          </h2>
+          <ol>
+            <li>
+              Download
+              <a
+                href="https://vjsbuilds.stag-os.org/jenkins/StagOS-lemonade-12.1-OFFICIAL-Pristine-20220620-0705/"
+                >StagOS Recovery</a
+              >. Simply download the latest recovery file, named
+              <code class="language-plaintext highlighter-rouge">boot.img</code
+              >.
+            </li>
+            <li>Connect your device to your PC via USB.</li>
+            <li>
+              On the computer, open a command prompt (on Windows) or terminal
+              (on Linux or macOS) window, and type:
+              <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight"><code>adb reboot bootloader
+</code></pre>
+                </div>
+              </div>
+              <p>You can also boot into fastboot mode via a key combination:</p>
+              <ul>
+                <li>
+                  With the device powered off, hold <kbd>Volume Up</kbd> +
+                  <kbd>Volume Down</kbd> + <kbd>Power</kbd>.
+                </li>
+              </ul>
+            </li>
+            <li>
+              Once the device is in fastboot mode, verify your PC finds it by
+              typing:
+              <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre class="highlight"><code>fastboot devices
+</code></pre>
+                </div>
+              </div>
+              <p>If you don’t get any output or an error:</p>
+              <ul>
+                <li>
+                  on Windows: make sure the device appears in the device manager
+                  without a triangle. Try other drivers until the command above
+                  works!
+                </li>
+                <li>
+                  on Linux or macOS: If you see
+                  <code class="language-plaintext highlighter-rouge"
+                    >no permissions fastboot</code
+                  >
+                  try running
+                  <code class="language-plaintext highlighter-rouge"
+                    >fastboot</code
+                  >
+                  as root. When the output is empty, check your USB cable
+                  (preferably use a USB Type-A 2.0 one or a USB hub) and port!
+                </li>
+              </ul>
+              <div class="alert alert-success" role="alert">
+                <div class="alert-icon">
+                  <i class="material-icons">check</i>
+                </div>
+                <div class="alert-text">
+                  <b>Tip:</b> Some devices have buggy USB support while in
+                  bootloader mode, if you see
+                  <code class="language-plaintext highlighter-rouge"
+                    >fastboot</code
+                  >
+                  hanging with no output when using commands such as
+                  <code class="language-plaintext highlighter-rouge"
+                    >fastboot getvar ...</code
+                  >,
+                  <code class="language-plaintext highlighter-rouge"
+                    >fastboot boot ...</code
+                  >,
+                  <code class="language-plaintext highlighter-rouge"
+                    >fastboot flash ...</code
+                  >
+                  you may want to try a different USB port (preferably a USB
+                  Type-A 2.0 one) or a USB hub.
+                </div>
+              </div>
+            </li>
+            <li>
+              Temporarily flash a recovery on your device by typing (replace
+              <code class="language-plaintext highlighter-rouge"
+                >&lt;recovery_filename&gt;</code
+              >
+              with the actual filename!):
+              <div class="language-plaintext highlighter-rouge">
+                <div class="highlight">
+                  <pre
+                    class="highlight"
+                  ><code>fastboot flash boot &lt;recovery_filename&gt;.img
+</code></pre>
+                </div>
+              </div>
+              <div class="alert alert-info" role="alert">
+                <div class="alert-icon">
+                  <i class="material-icons">info_outline</i>
+                </div>
+                <div class="alert-text">
+                  <b>Note:</b> Outdated fastboot releases dropped legacy A/B
+                  support, so it might attempt to flash to
+                  <code class="language-plaintext highlighter-rouge"
+                    >boot__a</code
+                  >
+                  /
+                  <code class="language-plaintext highlighter-rouge"
+                    >boot__b</code
+                  >
+                  rather than
+                  <code class="language-plaintext highlighter-rouge"
+                    >boot_a</code
+                  >
+                  /
+                  <code class="language-plaintext highlighter-rouge"
+                    >boot_b</code
+                  >
+                  if you try to flash
+                  <code class="language-plaintext highlighter-rouge">boot</code
+                  >. In this case, you must update
+                  <code class="language-plaintext highlighter-rouge"
+                    >fastboot</code
+                  >
+                  to a release newer than or equal to
+                  <code class="language-plaintext highlighter-rouge"
+                    >31.0.2</code
+                  >. Alternatively, you can manually specify which slot to flash
+                  to based on what slot fastboot failed to flash to. For
+                  example, if fastboot fails to flash to
+                  <code class="language-plaintext highlighter-rouge"
+                    >boot__a</code
+                  >, you must flash to
+                  <code class="language-plaintext highlighter-rouge"
+                    >boot_a</code
+                  >.
+                </div>
+              </div>
+            </li>
+            <li>
+              Now reboot into recovery to verify the installation.
+              <ul>
+                <li>
+                  Use the menu to navigate to and to select the
+                  <code class="language-plaintext highlighter-rouge"
+                    >Recovery</code
+                  >
+                  option.
+                </li>
+              </ul>
+            </li>
+          </ol>
+          <h2 id="ensuring-all-firmware-partitions-are-consistent">
+            Ensuring all firmware partitions are consistent
+          </h2>
+          <div class="alert alert-info" role="alert">
+            <div class="alert-icon">
+              <i class="material-icons">info_outline</i>
+            </div>
+            <div class="alert-text">
+              <b>Note:</b> The steps below only need to be run once per device.
+            </div>
+          </div>
+          <p>
+            In some cases, the inactive slot can be unpopulated or contain much
+            older firmware than the active slot, leading to various issues
+            including a potential hard-brick. We can ensure none of that will
+            happen by copying the contents of the active slot to the inactive
+            slot.
+          </p>
+          <p>
+            To do this, sideload the
+            <code class="language-plaintext highlighter-rouge"
+              >copy-partitions-20210323_1922.zip</code
+            >
+            package by doing the following:
+          </p>
+          <ol>
+            <li>
+              Download the
+              <code class="language-plaintext highlighter-rouge"
+                >copy-partitions-20210323_1922.zip</code
+              >
+              file from
+              <a href="https://www.androidfilehost.com/?fid=2188818919693768129"
+                >here</a
+              >. It should have a MD5 sum of
+              <code class="language-plaintext highlighter-rouge"
+                >92c010bf0371bfa6e55895c4c4750177</code
+              >
+              or a SHA-256 sum of
+              <code class="language-plaintext highlighter-rouge"
+                >200877dfd0869a0e628955b807705765a91e34dff3bfeca9f828e916346aa85f</code
+              >.
+            </li>
+            <li>
+              Sideload the
+              <code class="language-plaintext highlighter-rouge"
+                >copy-partitions-20210323_1922.zip</code
+              >
+              package:
+              <ul>
+                <li>
+                  On the device, select “Apply Update”, then “Apply from ADB” to
+                  begin sideload.
+                </li>
+                <li>
+                  On the host machine, sideload the package using:
+                  <code class="language-plaintext highlighter-rouge"
+                    >adb sideload copy-partitions-20210323_1922.zip</code
+                  >
+                </li>
+              </ul>
+              <div class="alert alert-info" role="alert">
+                <div class="alert-icon">
+                  <i class="material-icons">info_outline</i>
+                </div>
+                <div class="alert-text">
+                  <b>Note:</b> The copy-partitions script was created by
+                  LineageOS developer erfanoabdi and filipepferraz, but isn’t
+                  signed with LineageOS’s official key, and therefore when it is
+                  sideloaded, Lineage Recovery will present a screen that says
+                  <code class="language-plaintext highlighter-rouge"
+                    >Signature verification failed</code
+                  >, this is expected, please click
+                  <code class="language-plaintext highlighter-rouge"
+                    >Continue</code
+                  >.
+                </div>
+              </div>
+            </li>
+            <li>
+              Now reboot to recovery by tapping “Advanced”, then “Reboot to
+              recovery”.
+            </li>
+          </ol>
+          <h2 id="installing-lineageos-from-recovery">
+            Installing LineageOS from recovery
+          </h2>
+          <ol>
+            <li>
+              Download the
+              <a
+                href="https://sourceforge.net/projects/stagos-12/files/lemonade/StagOS-lemonade-12.1-OFFICIAL-Pristine-20220620-0705.zip/download"
+                >Non Gapps installation package</a
+              >
+              <a
+                href="https://sourceforge.net/projects/stagos-12/files/lemonade/StagOS-lemonade-12.1-OFFICIAL-GApps-20220620-0745.zip/download"
+                >Gapps installation package</a
+              >
+              that you would like to install.
+            </li>
+            <li>
+              If you are not in recovery, reboot into recovery:
+              <ul>
+                <li>
+                  With the device powered off, hold <kbd>Volume Down</kbd> +
+                  <kbd>Power</kbd>.
+                </li>
+              </ul>
+            </li>
+            <li>
+              Now tap <strong>Factory Reset</strong>, then
+              <strong>Format data / factory reset</strong> and continue with the
+              formatting process. This will remove encryption and delete all
+              files stored in the internal storage, as well as format your cache
+              partition (if you have one).
+            </li>
+            <li>Return to the main menu.</li>
+            <li>
+              Sideload the StagOS
+              <code class="language-plaintext highlighter-rouge">.zip</code>
+              package:
+              <ul>
+                <li>
+                  On the device, select “Apply Update”, then “Apply from ADB” to
+                  begin sideload.
+                </li>
+                <li>
+                  On the host machine, sideload the package using:
+                  <code class="language-plaintext highlighter-rouge"
+                    >adb sideload filename.zip</code
+                  >.
+                  <div class="alert alert-success" role="alert">
+                    <div class="alert-icon">
+                      <i class="material-icons">check</i>
+                    </div>
+                    <div class="alert-text">
+                      <b>Tip:</b> Normally, adb will report
+                      <code class="language-plaintext highlighter-rouge"
+                        >Total xfer: 1.00x</code
+                      >, but in some cases, even if the process succeeds the
+                      output will stop at 47% and report
+                      <code class="language-plaintext highlighter-rouge"
+                        >adb: failed to read command: Success</code
+                      >. In some cases it will report
+                      <code class="language-plaintext highlighter-rouge"
+                        >adb: failed to read command: No error</code
+                      >
+                      or
+                      <code class="language-plaintext highlighter-rouge"
+                        >adb: failed to read command: Undefined error: 0</code
+                      >
+                      which is also fine.
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </li>
+            <li>
+              <p>
+                <em>(Optionally)</em>: If you want to install any add-ons, click
+                <code class="language-plaintext highlighter-rouge"
+                  >Advanced</code
+                >, then
+                <code class="language-plaintext highlighter-rouge"
+                  >Reboot to Recovery</code
+                >, then when your device reboots, click
+                <code class="language-plaintext highlighter-rouge"
+                  >Apply Update</code
+                >, then
+                <code class="language-plaintext highlighter-rouge"
+                  >Apply from ADB</code
+                >, then
+                <code class="language-plaintext highlighter-rouge"
+                  >adb sideload filename.zip</code
+                >
+                those packages in sequence.
+              </p>
+              <div class="alert alert-info" role="alert">
+                <div class="alert-icon">
+                  <i class="material-icons">info_outline</i>
+                </div>
+                <div class="alert-text">
+                  <b>Note:</b> Add-ons aren’t signed with LineageOS’s official
+                  key, and therefore when they are sideloaded, Lineage Recovery
+                  will present a screen that says
+                  <code class="language-plaintext highlighter-rouge"
+                    >Signature verification failed</code
+                  >, this is expected, please click
+                  <code class="language-plaintext highlighter-rouge"
+                    >Continue</code
+                  >.
+                </div>
+              </div>
+              <div class="alert alert-info" role="alert">
+                <div class="alert-icon">
+                  <i class="material-icons">info_outline</i>
+                </div>
+                <div class="alert-text">
+                  <b>Note:</b> If you want the Google Apps add-on on your device
+                  and do not want to flash Gapps build, you must follow this
+                  step <strong>before</strong> booting into StagOS for the first
+                  time!
+                </div>
+              </div>
+            </li>
+            <li>
+              Once you have installed everything successfully, click the back
+              arrow in the top left of the screen, then “Reboot system now”.
+            </li>
+          </ol>
+          <div class="alert alert-info" role="alert">
+            <div class="alert-icon">
+              <i class="material-icons">info_outline</i>
+            </div>
+            <div class="alert-text">
+              <b>Note:</b> The first boot usually takes no longer than 15
+              minutes, depending on the device. If it takes longer, you may have
+              missed a step, otherwise feel free to
+              <a href="#get-assistance">get assistance</a>
+            </div>
+          </div>
+          <h2 id="get-assistance">Get assistance</h2>
+          <p>
+            After you’ve double checked that you followed the steps precisely,
+            didn’t skip any and still have questions or got stuck, feel free to
+            ask on <a href="https://t.me/HornsOfficial">our telegram</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+    <footer class="footer bg-light mt-5 px-2 py-4">
+      <div class="container">
+        <div class="row">
+          <div class="col-md text-center text-md-left">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 24">
+              <path
+                d="M40,12a4,4,0,0,0-3,1.33l-.23-.09A29.62,29.62,0,0,0,32,11.81h0a8,8,0,0,0-16,0l-.22,0a29.53,29.53,0,0,0-4.6,1.39l-.23.09a4,4,0,1,0,.93,1.78h0a27.62,27.62,0,0,1,4.29-1.29,8,8,0,0,0,15.57,0,27.55,27.55,0,0,1,4.29,1.28h0A4,4,0,1,0,40,12ZM8,18a2,2,0,1,1,2-2A2,2,0,0,1,8,18Zm16,0a6,6,0,1,1,6-6A6,6,0,0,1,24,18Zm16,0a2,2,0,1,1,2-2A2,2,0,0,1,40,18ZM27,12a3,3,0,1,1-3-3A3,3,0,0,1,27,12Z"
+              ></path>
+            </svg>
+            <p class="text-muted my-0">
+              <b>&copy; 2016 - 2022 The LineageOS Project</b>
+            </p>
+          </div>
+          <div class="col-md">
+            <p class="text-center text-md-right text-muted">
+              Licensed under
+              <a href="https://creativecommons.org/licenses/by-sa/3.0/"
+                >CC BY-SA 3.0</a
+              >.<br />
+              Site last generated: Jun 19, 2022
+            </p>
+          </div>
+        </div>
+      </div>
+    </footer>
+    <script>
+      anchors.add().remove("h1");
+    </script>
+    <script
+      defer
+      src="https://static.cloudflareinsights.com/beacon.min.js/v652eace1692a40cfa3763df669d7439c1639079717194"
+      integrity="sha512-Gi7xpJR8tSkrpF7aordPZQlW2DLtzUlZcumS8dMQjwDHEnw9I7ZLyiOj/6tZStRBGtGgN6ceN6cMH8z7etPGlw=="
+      data-cf-beacon='{"rayId":"71e61678a9d394bf","token":"6938b1e006d644fcb8b8169283dad7ee","version":"2022.6.0","si":100}'
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
