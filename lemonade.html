@@ -261,15 +261,17 @@
           </div>
           <ol>
             <li>
-              Download dtbo and vendor_boot files from
+              Download dtbo, vendor_boot and boot files from
               <a
                 href="https://vjsbuilds.stag-os.org/jenkins/StagOS-lemonade-12.1-OFFICIAL-Pristine-20220620-2250/"
                 >here</a
               >. Download the files named
-              <code class="language-plaintext highlighter-rouge">dtbo.img</code>
-              and
+              <code class="language-plaintext highlighter-rouge">dtbo.img</code
+              >,
               <code class="language-plaintext highlighter-rouge"
                 >vendor_boot.img</code
+              >,<code class="language-plaintext highlighter-rouge"
+                >boot.img</code
               >
               from the link.
             </li>
@@ -287,10 +289,15 @@
               <code class="language-plaintext highlighter-rouge"
                 >&lt;dtbo&gt;</code
               >
-              and
+              ,
               <code class="language-plaintext highlighter-rouge"
                 >&lt;vendor_boot&gt;</code
               >
+              and
+              <code class="language-plaintext highlighter-rouge"
+                >&lt;boot&gt;</code
+              >
+
               with the actual filenames!):
               <div class="language-plaintext highlighter-rouge">
                 <div class="highlight">
@@ -298,84 +305,7 @@
                     class="highlight"
                   ><code>fastboot flash dtbo &lt;dtbo&gt;.img
 fastboot flash vendor_boot &lt;vendor_boot&gt;.img
-</code></pre>
-                </div>
-              </div>
-            </li>
-            <li>
-              Download
-              <a
-                href="https://vjsbuilds.stag-os.org/jenkins/StagOS-lemonade-12.1-OFFICIAL-Pristine-20220620-2250/"
-                >StagOS Recovery</a
-              >. Simply download the latest recovery file, named
-              <code class="language-plaintext highlighter-rouge">boot.img</code
-              >.
-            </li>
-            <li>
-              Once the device is in fastboot mode, verify your PC finds it by
-              typing:
-              <div class="language-plaintext highlighter-rouge">
-                <div class="highlight">
-                  <pre class="highlight"><code>fastboot devices
-</code></pre>
-                </div>
-              </div>
-              <p>If you don’t get any output or an error:</p>
-              <ul>
-                <li>
-                  on Windows: make sure the device appears in the device manager
-                  without a triangle. Try other drivers until the command above
-                  works!
-                </li>
-                <li>
-                  on Linux or macOS: If you see
-                  <code class="language-plaintext highlighter-rouge"
-                    >no permissions fastboot</code
-                  >
-                  try running
-                  <code class="language-plaintext highlighter-rouge"
-                    >fastboot</code
-                  >
-                  as root. When the output is empty, check your USB cable
-                  (preferably use a USB Type-A 2.0 one or a USB hub) and port!
-                </li>
-              </ul>
-              <div class="alert alert-success" role="alert">
-                <div class="alert-icon">
-                  <i class="material-icons">check</i>
-                </div>
-                <div class="alert-text">
-                  <b>Tip:</b> Some devices have buggy USB support while in
-                  bootloader mode, if you see
-                  <code class="language-plaintext highlighter-rouge"
-                    >fastboot</code
-                  >
-                  hanging with no output when using commands such as
-                  <code class="language-plaintext highlighter-rouge"
-                    >fastboot getvar ...</code
-                  >,
-                  <code class="language-plaintext highlighter-rouge"
-                    >fastboot boot ...</code
-                  >,
-                  <code class="language-plaintext highlighter-rouge"
-                    >fastboot flash ...</code
-                  >
-                  you may want to try a different USB port (preferably a USB
-                  Type-A 2.0 one) or a USB hub.
-                </div>
-              </div>
-            </li>
-            <li>
-              Temporarily flash a recovery on your device by typing (replace
-              <code class="language-plaintext highlighter-rouge"
-                >&lt;recovery_filename&gt;</code
-              >
-              with the actual filename!):
-              <div class="language-plaintext highlighter-rouge">
-                <div class="highlight">
-                  <pre
-                    class="highlight"
-                  ><code>fastboot flash boot &lt;recovery_filename&gt;.img
+fastboot flash boot &lt;boot&gt;.img
 </code></pre>
                 </div>
               </div>
@@ -540,7 +470,7 @@ fastboot flash vendor_boot &lt;vendor_boot&gt;.img
               If you are not in recovery, reboot into recovery:
               <ul>
                 <li>
-                  With the device powered off, hold <kbd>Volume Down</kbd> +
+                  With the device powered off, hold <kbd>Volume Up</kbd> +
                   <kbd>Power</kbd>.
                 </li>
               </ul>
